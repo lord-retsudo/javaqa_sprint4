@@ -1,34 +1,21 @@
-import io.github.bonigarcia.wdm.WebDriverManager;
+//import io.github.bonigarcia.wdm.WebDriverManager;
 import org.hamcrest.MatcherAssert;
-import org.junit.After;
-import org.junit.Before;
+//import org.junit.After;
+//import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+//import org.openqa.selenium.WebDriver;
+//import org.openqa.selenium.chrome.ChromeDriver;
+//import org.openqa.selenium.firefox.FirefoxDriver;
 import samokat.MainPage;
 import samokat.OrderPage;
 import static org.hamcrest.CoreMatchers.containsString;
 
 @RunWith(Parameterized.class)
-public class CheckOrder {
+public class CheckOrder extends BaseTest {
 
-    private WebDriver driver;
-
-    @Before
-    public void startUp() {
-
-   //     WebDriverManager.firefoxdriver().clearDriverCache().setup();
-   //     driver = new FirefoxDriver();
-
-        String chromeDriverPath = "C:\\selenium_drivers\\chromedriver.exe";
-        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
-        //WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-    }
-
+    // private WebDriver driver;
     private final int id;
     private final String name;
     private final String family;
@@ -65,27 +52,11 @@ public class CheckOrder {
         mainPage.openMainPage();
         mainPage.clickOrder(id);
         OrderPage orderPage = new OrderPage(driver);
-        orderPage.inputName(name);
-        orderPage.inputFamily(family);
-        orderPage.inputAdress(adress);
-        orderPage.clickMetro();
-        orderPage.selectStation(station);
-        orderPage.inputPhoneNumber(phone);
-        orderPage.clickNextButton();
-        orderPage.inputDate(date);
-        orderPage.chooseRentalPeriod();
-        orderPage.chooseSamokatColor(color);
-        orderPage.inputComment(comment);
-        orderPage.clickOrderComplete();
-        orderPage.checkOrderCompleteWindow();
-        orderPage.clickOrderYes();
+
+        orderPage.makeOrder(name, family, adress, station, phone, date, color, comment);
+
         MatcherAssert.assertThat("Нет окна (Заказ оформлен)",
                 orderPage.getLastOrderText(), containsString("Заказ оформлен"));
-    }
-
-    @After
-    public void teardown() {
-        driver.quit();
     }
 
 }

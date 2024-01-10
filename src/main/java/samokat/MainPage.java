@@ -10,8 +10,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class MainPage {
 
     private final WebDriver driver;
-    private final String orderButtonTop = ".//button[@class='Button_Button__ra12g']";
-    private final String orderButtonBottom = ".//div[@class='Home_FinishButton__1_cWm']/button";
+    private final String locOrderButtonTop = ".//button[@class='Button_Button__ra12g']";
+    private final String locOrderButtonBottom = ".//div[@class='Home_FinishButton__1_cWm']/button";
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
@@ -21,31 +21,39 @@ public class MainPage {
         driver.get("https://qa-scooter.praktikum-services.ru/");
     }
 
-    public void clickQuestionHeader(String questionHeader) {
-        WebElement element = driver.findElement(By.id(questionHeader));
+    public void clickQuestionHeader(By questionHeader) {
+        WebElement element = driver.findElement(questionHeader);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-        new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(By.id(questionHeader)));
+        new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(questionHeader));
         element.click();
     }
 
-    public String getQuestionHeaderText(String questionHeader) {
-        WebElement element = driver.findElement(By.id(String.valueOf(questionHeader)));
+    public String getQuestionHeaderText(By questionHeader) {
+        WebElement element = driver.findElement(questionHeader);
         return element.getText();
     }
 
-    public String getQuestionBodyText(String questionBody) {
-        new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOfElementLocated(By.id(questionBody)));
-        return driver.findElement(By.id(questionBody)).getText();
+    public String getQuestionBodyText(By questionBody) {
+        new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOfElementLocated(questionBody));
+        return driver.findElement(questionBody).getText();
+    }
+
+    public By getQuestionHeaderTextLoc(String textQuestionHeader) {
+        return By.xpath("//div[text()='" + textQuestionHeader + "']");
+    }
+
+    public By getQuestionBodyTextLoc(String textQuestionBody) {
+        return By.xpath("//div[p[contains(text(),'" + textQuestionBody + "')]]");
     }
 
     public void clickOrder(int id) {
 
         if (id == 1) {
-            driver.findElement(By.xpath(orderButtonTop)).click();
+            driver.findElement(By.xpath(locOrderButtonTop)).click();
         } else {
-            WebElement element = driver.findElement(By.xpath(orderButtonBottom));
+            WebElement element = driver.findElement(By.xpath(locOrderButtonBottom));
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            driver.findElement(By.xpath(orderButtonBottom)).click();
+            driver.findElement(By.xpath(locOrderButtonBottom)).click();
         }
     }
 }
